@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_20_021432) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_20_205533) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -22,33 +22,39 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_20_021432) do
     t.datetime "updated_at", null: false
     t.index ["cart_id"], name: "index_cart_items_on_cart_id"
     t.index ["product_id"], name: "index_cart_items_on_product_id"
+    t.check_constraint "quantity > 0", name: "cart_items_quantity_positive"
   end
 
   create_table "carts", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "token", null: false
+    t.index ["token"], name: "index_carts_on_token", unique: true
   end
 
   create_table "order_items", force: :cascade do |t|
     t.bigint "order_id", null: false
     t.bigint "product_id", null: false
-    t.string "product_name"
+    t.string "product_name", null: false
     t.decimal "price", precision: 10, scale: 2, null: false
     t.integer "quantity", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["order_id"], name: "index_order_items_on_order_id"
     t.index ["product_id"], name: "index_order_items_on_product_id"
+    t.check_constraint "price >= 0::numeric", name: "order_items_price_non_negative"
+    t.check_constraint "quantity > 0", name: "order_items_quantity_positive"
   end
 
   create_table "orders", force: :cascade do |t|
-    t.string "customer_name"
-    t.string "customer_email"
-    t.text "shipping_address"
+    t.string "customer_name", null: false
+    t.string "customer_email", null: false
+    t.text "shipping_address", null: false
     t.decimal "total_amount", precision: 10, scale: 2, null: false
     t.string "status", default: "pending", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.check_constraint "total_amount >= 0::numeric", name: "orders_total_amount_non_negative"
   end
 
   create_table "products", force: :cascade do |t|
@@ -58,6 +64,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_20_021432) do
     t.integer "stock", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.check_constraint "price >= 0::numeric", name: "products_price_non_negative"
+    t.check_constraint "stock >= 0", name: "products_stock_non_negative"
   end
 
   add_foreign_key "cart_items", "carts"

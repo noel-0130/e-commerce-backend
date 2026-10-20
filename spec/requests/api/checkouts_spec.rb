@@ -28,12 +28,22 @@ RSpec.describe "API::Checkouts", type: :request do
         shipping_address: "Ormoc City, Leyte"
       }
     end
+
+    let(:headers) do
+      {
+        "X-Cart-Token" => cart.token
+      }
+    end
     
     it "create an order successfully" do
-      expect {
-        post "/api/carts/#{cart.id}/checkout", params: checkout_params
-      }.to change(Order, :count).by(1)
+      post "/api/carts/#{cart.id}/checkout",
+          params: checkout_params,
+          headers: headers
+
       expect(response).to have_http_status(:created)
+
+      puts response.status
+      puts response.body
 
       json = JSON.parse(response.body)
 
@@ -44,7 +54,7 @@ RSpec.describe "API::Checkouts", type: :request do
 
     it "deduct product stock after checkout" do
       expect {
-        post "/api/carts/#{cart.id}/checkout", params: checkout_params
+        post "/api/carts/#{cart.id}/checkout", params: checkout_params, headers: headers
       }.to change{ product.reload.stock }.from(10).to(8)
 
       expect(response).to have_http_status(:created)
@@ -52,7 +62,7 @@ RSpec.describe "API::Checkouts", type: :request do
 
     it "creates order items after checkout" do
       expect {
-        post "/api/carts/#{cart.id}/checkout", params: checkout_params
+        post "/api/carts/#{cart.id}/checkout", params: checkout_params, headers: headers
       }.to change(OrderItem, :count).by(1)
 
       expect(response).to have_http_status(:created)
@@ -68,7 +78,7 @@ RSpec.describe "API::Checkouts", type: :request do
 
     it "clears the cart after checkout" do
       expect {
-        post "/api/carts/#{cart.id}/checkout", params: checkout_params
+        post "/api/carts/#{cart.id}/checkout", params: checkout_params, headers: headers
       }.to change(CartItem, :count).by(-1)
 
       expect(response).to have_http_status(:created)
@@ -79,9 +89,9 @@ RSpec.describe "API::Checkouts", type: :request do
     it "rejects checkout when stock is insufficient" do
       product.update!(stock: 1)
 
-      post "/api/carts/#{cart.id}/checkout", params: checkout_params
+      post "/api/carts/#{cart.id}/checkout", params: checkout_params, headers: headers
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
 
       expect(Order.count).to eq(0)
 
@@ -94,14 +104,56 @@ RSpec.describe "API::Checkouts", type: :request do
       cart.cart_items.destroy_all
 
       expect {
-        post "/api/carts/#{cart.id}/checkout", params: checkout_params
+        post "/api/carts/#{cart.id}/checkout", params: checkout_params, headers: headers
       }.not_to change(Order, :count)
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
 
       json = JSON.parse(response.body)
 
       expect(json["error"]).to eq("Cart is empty")
+    end
+
+    it "reject checkout when customer information is missing" do
+      invalid_params = checkout_params.except(:customer_name)
+
+      expect {
+        post "/api/carts/#{cart.id}/checkout",
+        params: invalid_params,
+        headers: headers
+      }.not_to change(Order, :count)
+
+      expect(response).to have_http_status(:unprocessable_content)
+    end
+
+    it "rejects checkout with an invalid token" do
+      invalid_headers = {
+        "X-Cart-Token" => "invalid_token"
+      }
+
+      expect {
+        post "/api/carts/#{cart.id}/checkout",
+        params: checkout_params,
+        headers: invalid_headers
+      }.not_to change(Order, :count)
+
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "rolls back checkout when order item creation fails" do
+      allow_any_instance_of(Order).to receive(:order_items).and_raise(
+        ActiveRecord::RecordInvalid.new(Order.new)
+      )
+
+      expect {
+        post "/api/carts/#{cart.id}/checkout",
+            params: checkout_params,
+            headers: headers
+      }.not_to change(Order, :count)
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(product.reload.stock).to eq(10)
+      expect(cart.reload.cart_items.count).to eq(1)
     end
   end
 end

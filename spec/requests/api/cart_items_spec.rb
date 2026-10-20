@@ -1,9 +1,16 @@
 require "rails_helper"
 
 RSpec.describe "Cart items API", type: :request do
+  let(:cart) { Cart.create! }
+
+  let(:headers) do
+    {
+      "X-Cart-Token" => cart.token
+    }
+  end
+
   describe "POST /api/carts/:cart_id/cart_items" do
     it "add a product to the cart" do
-      cart = Cart.create!
       product = Product.create!(
         name: "Test Mouse",
         price: 100,
@@ -17,7 +24,8 @@ RSpec.describe "Cart items API", type: :request do
             product_id: product.id,
             quantity: 2
           }
-        }
+        },
+        headers: headers
       }.to change(CartItem, :count).by(1)
 
       expect(response).to have_http_status(:created)
@@ -28,8 +36,6 @@ RSpec.describe "Cart items API", type: :request do
     end
 
     it "increase quantiy when adding the same product again" do
-      cart = Cart.create!
-
       product = Product.create!(
         name: "Test Mouse",
         price: 100,
@@ -42,14 +48,14 @@ RSpec.describe "Cart items API", type: :request do
         quantity: 2
       )
       
-
       expect {
         post "/api/carts/#{cart.id}/cart_items", params: {
           cart_item: {
             product_id: product.id,
             quantity: 3
           }
-        }
+        },
+        headers: headers
       }.not_to change(CartItem, :count)
 
       cart_item = CartItem.find_by!(cart: cart, product: product)
@@ -60,7 +66,6 @@ RSpec.describe "Cart items API", type: :request do
 
   describe "PATCH /api/carts/:cart_id/cart_itmes/:id" do
     it "updates the cart item quantity" do
-      cart = Cart.create!
       product = Product.create!(
         name: "Test Mouse",
         price: 100,
@@ -78,11 +83,8 @@ RSpec.describe "Cart items API", type: :request do
         cart_item: {
           quantity: 2
         }
-      }
-
-      puts "############"
-      puts response.body
-      puts "###########"
+      },
+      headers: headers
 
       expect(response).to have_http_status(:ok)
 
@@ -92,7 +94,6 @@ RSpec.describe "Cart items API", type: :request do
     end
 
     it "increase the quantity by one" do
-      cart = Cart.create!
       product = Product.create!(
         name: "Test Mouse",
         price: 100,
@@ -106,7 +107,7 @@ RSpec.describe "Cart items API", type: :request do
 
       patch"/api/carts/#{cart.id}/cart_items/#{cart_item.id}", params: {
         action_type: "increase"
-      }
+      }, headers: headers
 
       expect(response).to have_http_status(:ok)
       
@@ -116,7 +117,6 @@ RSpec.describe "Cart items API", type: :request do
     end
 
     it "decreases the quantity by one" do
-      cart = Cart.create!
       product = Product.create!(
         name: "Test Mouse",
         price: 100,
@@ -141,7 +141,6 @@ RSpec.describe "Cart items API", type: :request do
     end
 
     it "rejects quantity below one" do
-      cart = Cart.create!
       product = Product.create!(
         name: "Test Mouse",
         price: 100,
@@ -159,7 +158,7 @@ RSpec.describe "Cart items API", type: :request do
               action_type: "decrease"
             }
 
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:unprocessable_content)
 
       cart_item.reload
       expect(cart_item.quantity).to eq(1)
@@ -167,8 +166,6 @@ RSpec.describe "Cart items API", type: :request do
 
     describe "DELETE /api/carts/:cart_id/cart_items/:id" do
       it "removes the item from the cart without deleting the cart" do
-        cart = Cart.create!
-
         product = Product.create!(
           name: "Test Mouse",
           price: 100,

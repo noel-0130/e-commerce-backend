@@ -3,12 +3,12 @@ class Api::CheckoutsController < ApplicationController
   end
 
   def create
-    cart = Cart.find(params[:cart_id])
+    cart = Cart.find_by!(id: params[:cart_id], token: request.headers["X-Cart-Token"])
     items = cart.cart_items.includes(:product)
 
     if items.empty?
       return render json: { error: "Cart is empty" },
-                    status: :unprocessable_entity
+                    status: :unprocessable_content
     end
 
     order = nil
@@ -63,11 +63,11 @@ class Api::CheckoutsController < ApplicationController
 
   rescue InsufficientStockError => e
     render json: { error: e.message },
-           status: :unprocessable_entity
+           status: :unprocessable_content
 
   rescue ActiveRecord::RecordInvalid => e
     render json: { errors: e.record.errors.full_messages },
-           status: :unprocessable_entity
+           status: :unprocessable_content
 
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Cart or product not found" },

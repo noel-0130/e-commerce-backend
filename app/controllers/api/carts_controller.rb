@@ -2,11 +2,11 @@ class Api::CartsController < ApplicationController
   def create
     cart = Cart.create!
 
-    render json: { id: cart.id }, status: :created
+    render json: { id: cart.id, token: cart.token }, status: :created
   end
 
   def show
-    cart = Cart.find(params[:id])
+    cart = Cart.find_by!(id: params[:id], token: request.headers["X-Cart-Token"])
     items = cart.cart_items.includes(:product)
     formatted_items = items.map do |item|
       {

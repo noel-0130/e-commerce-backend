@@ -1,6 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "Carts API", type: :request do
+  let(:cart) { Cart.create! }
+  let(:headers) do
+    {
+      "X-Cart-Token" => cart.token
+    }
+  end
   describe "POST /api/carts" do
     it "create a new cart" do
       expect{
@@ -15,8 +21,6 @@ RSpec.describe "Carts API", type: :request do
 
   describe "GET /api/carts/:id" do
     it "returns cart details with item and total" do
-      cart = Cart.create!
-
       product = Product.create!(
         name: "Test Mouse",
         price: 100,
@@ -29,7 +33,7 @@ RSpec.describe "Carts API", type: :request do
         quantity: 2
       )
 
-      get "/api/carts/#{cart.id}"
+      get "/api/carts/#{cart.id}", headers: headers
 
       expect(response).to have_http_status(:ok)
 

@@ -10,7 +10,7 @@ class Api::ProductsController < ApplicationController
     if product.save
       render json: product, status: :created
     else
-      render json: { errors: product.errors.full_messages , status: :unprocessable_entity }
+      render json: { errors: product.errors.full_messages , status: :unprocessable_content }
     end
   end
 
@@ -32,7 +32,7 @@ class Api::ProductsController < ApplicationController
     if product.update(product_params)
       render json: product, status: :ok
     else
-      render json: { errors: product.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: product.errors.full_messages }, status: :unprocessable_content
     end
   end
 

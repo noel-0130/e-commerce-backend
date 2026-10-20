@@ -10,7 +10,7 @@ class Api::CartItemsController < ApplicationController
     if cart_item.save
       render json: cart_item, status: :created
     else
-      render json: { errors: cart_item.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: cart_item.errors.full_messages }, status: :unprocessable_content
     end
   end
 
@@ -26,23 +26,23 @@ class Api::CartItemsController < ApplicationController
         cart_item.quantity -= 1
       else
         return render json: { error: "Invalid action" },
-                      status: :unprocessable_entity
+                      status: :unprocessable_content
       end
     elsif params[:cart_item].present?
       unless cart_item.update(cart_items_params)
         return render json: { errors: cart_item.errors.full_messages },
-                      status: :unprocessable_entity
+                      status: :unprocessable_content
       end
     else
       return render json: { error: "Missing quantity or action_type" },
-                    status: :unprocessable_entity
+                    status: :unprocessable_content
     end
 
     if cart_item.save
       render json: cart_item, status: :ok
     else
       render json: { errors: cart_item.errors.full_messages },
-            status: :unprocessable_entity
+            status: :unprocessable_content
     end
   end
 
