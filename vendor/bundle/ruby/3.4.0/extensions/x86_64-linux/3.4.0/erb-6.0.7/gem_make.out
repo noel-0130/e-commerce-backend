@@ -1,0 +1,19 @@
+current directory: /workspaces/RubyPractice/backend/vendor/bundle/ruby/3.4.0/gems/erb-6.0.7/ext/erb/escape
+/usr/local/rubies/3.4.9/bin/ruby extconf.rb
+checking for rb_ext_ractor_safe() in ruby.h... yes
+creating Makefile
+
+current directory: /workspaces/RubyPractice/backend/vendor/bundle/ruby/3.4.0/gems/erb-6.0.7/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20261018-66760-plwi6v sitelibdir\=./.gem.20261018-66760-plwi6v clean
+
+current directory: /workspaces/RubyPractice/backend/vendor/bundle/ruby/3.4.0/gems/erb-6.0.7/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20261018-66760-plwi6v sitelibdir\=./.gem.20261018-66760-plwi6v
+compiling escape.c
+linking shared-object erb/escape.so
+
+current directory: /workspaces/RubyPractice/backend/vendor/bundle/ruby/3.4.0/gems/erb-6.0.7/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20261018-66760-plwi6v sitelibdir\=./.gem.20261018-66760-plwi6v install
+/usr/bin/install -c -m 0755 escape.so ./.gem.20261018-66760-plwi6v/erb
+
+current directory: /workspaces/RubyPractice/backend/vendor/bundle/ruby/3.4.0/gems/erb-6.0.7/ext/erb/escape
+make DESTDIR\= sitearchdir\=./.gem.20261018-66760-plwi6v sitelibdir\=./.gem.20261018-66760-plwi6v clean

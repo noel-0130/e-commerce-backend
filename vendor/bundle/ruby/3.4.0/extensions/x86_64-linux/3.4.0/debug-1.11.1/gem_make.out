@@ -1,0 +1,19 @@
+current directory: /workspaces/RubyPractice/backend/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+/usr/local/rubies/3.4.9/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /workspaces/RubyPractice/backend/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20261018-66760-b2uhy8 sitelibdir\=./.gem.20261018-66760-b2uhy8 clean
+
+current directory: /workspaces/RubyPractice/backend/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20261018-66760-b2uhy8 sitelibdir\=./.gem.20261018-66760-b2uhy8
+compiling debug.c
+compiling iseq_collector.c
+linking shared-object debug/debug.so
+
+current directory: /workspaces/RubyPractice/backend/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20261018-66760-b2uhy8 sitelibdir\=./.gem.20261018-66760-b2uhy8 install
+/usr/bin/install -c -m 0755 debug.so ./.gem.20261018-66760-b2uhy8/debug
+
+current directory: /workspaces/RubyPractice/backend/vendor/bundle/ruby/3.4.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20261018-66760-b2uhy8 sitelibdir\=./.gem.20261018-66760-b2uhy8 clean
