@@ -1,0 +1,67 @@
+
+CartItem
+  validations
+    is valid with a positive quantity
+    is invalid with a quantity of zero
+
+Cart
+  associations
+    has many cart items
+
+OrderItem
+  add some examples to (or delete) /workspaces/RubyPractice/backend/spec/models/order_item_spec.rb (PENDING: Not yet implemented)
+
+Order
+  add some examples to (or delete) /workspaces/RubyPractice/backend/spec/models/order_spec.rb (PENDING: Not yet implemented)
+
+Cart items API
+  POST /api/carts/:cart_id/cart_items
+    add a product to the cart
+    increase quantiy when adding the same product again
+  PATCH /api/carts/:cart_id/cart_itmes/:id
+############
+{"cart_id":36,"quantity":2,"product_id":42,"id":28,"created_at":"2026-10-20T05:54:14.535Z","updated_at":"2026-10-20T05:54:14.540Z"}
+###########
+    updates the cart item quantity
+    increase the quantity by one
+    decreases the quantity by one
+/workspaces/RubyPractice/backend/vendor/bundle/ruby/3.4.0/gems/rspec-rails-8.0.4/lib/rspec/rails/matchers/have_http_status.rb:219: warning: Status code :unprocessable_entity is deprecated and will be removed in a future version of Rack. Please use :unprocessable_content instead.
+    rejects quantity below one
+    DELETE /api/carts/:cart_id/cart_items/:id
+      removes the item from the cart without deleting the cart
+
+Carts API
+  POST /api/carts
+    create a new cart
+  GET /api/carts/:id
+    returns cart details with item and total
+
+API::Checkouts
+  POST /api/carts/:cart_id/checkout
+    create an order successfully
+
+Products API
+  GET /api/products
+    returns a list of products
+    return products as JSON
+    return a single product
+  POST /api/products
+    creates a new product
+  PATCH /api/products/:id
+    update an exisiting product
+  DELETE /api/products/:id
+    deletes an existing product
+
+Pending: (Failures listed here are expected and do not affect your suite's status)
+
+  1) OrderItem add some examples to (or delete) /workspaces/RubyPractice/backend/spec/models/order_item_spec.rb
+     # Not yet implemented
+     # ./spec/models/order_item_spec.rb:4
+
+  2) Order add some examples to (or delete) /workspaces/RubyPractice/backend/spec/models/order_spec.rb
+     # Not yet implemented
+     # ./spec/models/order_spec.rb:4
+
+Finished in 0.34171 seconds (files took 0.82721 seconds to load)
+21 examples, 0 failures, 2 pending
+

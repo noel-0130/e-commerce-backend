@@ -1,5 +1,11 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Cart, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "associations" do
+    it "has many cart items" do
+      association = described_class.reflect_on_association(:cart_items)
+
+      expect(association.macro).to eq(:has_many)
+    end
+  end
 end
