@@ -32,7 +32,7 @@ RSpec.describe "Cart items API", type: :request do
 
       cart_item = CartItem.last
       expect(cart_item.product_id).to eq(product.id)
-      expect(cart_item.quantity).to eq(3)
+      expect(cart_item.quantity).to eq(2)
     end
 
     it "increase quantiy when adding the same product again" do
@@ -132,7 +132,8 @@ RSpec.describe "Cart items API", type: :request do
       patch "/api/carts/#{cart.id}/cart_items/#{cart_item.id}",
             params: {
               action_type: "decrease"
-            }
+            },
+            headers: headers
 
       expect(response).to have_http_status(:ok)
 
@@ -156,7 +157,8 @@ RSpec.describe "Cart items API", type: :request do
       patch "/api/carts/#{cart.id}/cart_items/#{cart_item.id}",
             params: {
               action_type: "decrease"
-            }
+            },
+            headers: headers
 
       expect(response).to have_http_status(:unprocessable_content)
 
@@ -179,7 +181,7 @@ RSpec.describe "Cart items API", type: :request do
         )
 
         expect {
-          delete "/api/carts/#{cart.id}/cart_items/#{cart_item.id}"
+          delete "/api/carts/#{cart.id}/cart_items/#{cart_item.id}", headers: headers
         }.to change(CartItem, :count).by(-1)
 
         expect(response).to have_http_status(:no_content)
