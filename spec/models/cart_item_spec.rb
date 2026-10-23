@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe CartItem, type: :model do
   describe "validations" do
     it "is valid with a positive quantity" do
-      cart = Cart.create!
+      cart = create(:cart)
 
       product = Product.create!(
         name: "Test Mouse",
@@ -21,7 +21,7 @@ RSpec.describe CartItem, type: :model do
     end
 
     it "is invalid with a quantity of zero" do
-      cart = Cart.create!
+      cart = create(:cart)
 
       product = Product.create!(
         name: "Test Mouse",

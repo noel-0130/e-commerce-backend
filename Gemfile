@@ -50,14 +50,13 @@ group :development, :test do
 
   gem "rspec-rails"
 
-  gem "omniauth"
-  gem "omniauth-google-oauth2"
 
   gem "activerecord-session_store"
 
   gem "dotenv-rails", groups: [:development, :test]
 end
 
-gem "omniauth-rails_csrf_protection", "~> 2.0"
 
 gem "googleauth", "~> 1.17"
+
+gem "factory_bot_rails", "~> 6.5", groups: [:development, :test]

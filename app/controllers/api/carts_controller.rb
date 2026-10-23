@@ -1,13 +1,29 @@
 class Api::CartsController < ApplicationController
   def create
-    cart = Cart.create!
+    user = User.first
 
-    render json: { id: cart.id, token: cart.token }, status: :created
+    unless user
+      return render json: {
+        error: "User not found"
+      }, status: :unprocessable_entity
+    end
+
+    cart = user.create_cart!
+
+    render json: {
+      id: cart.id,
+      token: cart.token
+    }, status: :created
   end
 
   def show
-    cart = Cart.find_by!(id: params[:id], token: request.headers["X-Cart-Token"])
+    cart = Cart.find_by!(
+      id: params[:id],
+      token: request.headers["X-Cart-Token"]
+    )
+
     items = cart.cart_items.includes(:product)
+
     formatted_items = items.map do |item|
       {
         product_id: item.product_id,

@@ -1,21 +1,29 @@
 require "rails_helper"
 
 RSpec.describe "Carts API", type: :request do
-  let(:cart) { Cart.create! }
+  let(:user) { create(:user) }
+  let(:cart) { create(:cart, user: user) }
+
   let(:headers) do
     {
       "X-Cart-Token" => cart.token
     }
   end
+
   describe "POST /api/carts" do
-    it "create a new cart" do
-      expect{
+    it "creates a new cart" do
+      user
+
+      expect do
         post "/api/carts"
-      }.to change(Cart, :count).by(1)
+      end.to change(Cart, :count).by(1)
+
       expect(response).to have_http_status(:created)
 
       json = JSON.parse(response.body)
+
       expect(json["id"]).to be_present
+      expect(json["token"]).to be_present
     end
   end
 
