@@ -1,0 +1,9 @@
+<h1>ShopEase Login</h1>
+
+<p>Sign in using your Google account.</p>
+
+<%= form_tag("/auth/google_oauth2", method: :post) do %>
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
+  <%= button_tag "Sign in with Google", type: "submit" %>
+<% end %>

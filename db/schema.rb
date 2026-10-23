@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_20_205533) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_21_082959) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -29,7 +29,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_20_205533) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "token", null: false
+    t.bigint "user_id"
     t.index ["token"], name: "index_carts_on_token", unique: true
+    t.index ["user_id"], name: "index_carts_on_user_id"
   end
 
   create_table "order_items", force: :cascade do |t|
@@ -68,8 +70,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_20_205533) do
     t.check_constraint "stock >= 0", name: "products_stock_non_negative"
   end
 
+  create_table "sessions", force: :cascade do |t|
+    t.string "session_id", null: false
+    t.text "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["session_id"], name: "index_sessions_on_session_id", unique: true
+    t.index ["updated_at"], name: "index_sessions_on_updated_at"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", null: false
+    t.string "name", null: false
+    t.string "google_uid", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["google_uid"], name: "index_users_on_google_uid", unique: true
+  end
+
   add_foreign_key "cart_items", "carts"
   add_foreign_key "cart_items", "products"
+  add_foreign_key "carts", "users"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
 end
