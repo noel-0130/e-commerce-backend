@@ -1,14 +1,19 @@
 #!/bin/bash -e
 
-# If running the rails server then create or migrate existing database
+# Prepare the database when starting the Rails server
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
   if [ -n "$DATABASE_URL" ]; then
     echo "DATABASE_URL is present at startup"
   else
     echo "ERROR: DATABASE_URL is missing at startup"
+    exit 1
   fi
 
+  echo "Preparing production database..."
   ./bin/rails db:prepare
+
+  echo "Checking whether production seeds have run..."
+  ./bin/rails db:seed_once
 fi
 
 exec "${@}"
