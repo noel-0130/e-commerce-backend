@@ -1,14 +1,13 @@
 class Api::CartsController < ApplicationController
   def create
-    user = User.first
+    user = User.find_by(id: session[:user_id])
 
     unless user
-      return render json: {
-        error: "User not found"
-      }, status: :unprocessable_entity
+      return render json: { error: "Not authenticated" },
+                    status: :unauthorized
     end
 
-    cart = user.create_cart!
+    cart = user.cart || user.create_cart!
 
     render json: {
       id: cart.id,
@@ -26,9 +25,11 @@ class Api::CartsController < ApplicationController
 
     formatted_items = items.map do |item|
       {
+        cart_item_id: item.id,
         product_id: item.product_id,
         name: item.product.name,
         price: item.product.price,
+        stock: item.product.stock,
         quantity: item.quantity,
         subtotal: item.product.price * item.quantity
       }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_21_082959) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_23_074821) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -68,6 +68,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_21_082959) do
     t.datetime "updated_at", null: false
     t.check_constraint "price >= 0::numeric", name: "products_price_non_negative"
     t.check_constraint "stock >= 0", name: "products_stock_non_negative"
+  end
+
+  create_table "seed_runs", force: :cascade do |t|
+    t.string "seed_name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["seed_name"], name: "index_seed_runs_on_seed_name", unique: true
   end
 
   create_table "sessions", force: :cascade do |t|

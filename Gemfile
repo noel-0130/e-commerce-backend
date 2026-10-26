@@ -50,13 +50,12 @@ group :development, :test do
 
   gem "rspec-rails"
 
-
-  gem "activerecord-session_store"
-
   gem "dotenv-rails", groups: [:development, :test]
 end
 
 
 gem "googleauth", "~> 1.17"
+
+gem "activerecord-session_store"
 
 gem "factory_bot_rails", "~> 6.5", groups: [:development, :test]

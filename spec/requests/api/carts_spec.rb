@@ -11,19 +11,45 @@ RSpec.describe "Carts API", type: :request do
   end
 
   describe "POST /api/carts" do
-    it "creates a new cart" do
-      user
+    context "when logged in" do
+      before do
+        allow_any_instance_of(Api::CartsController)
+          .to receive(:session).and_return({ user_id: user.id })
+      end
 
-      expect do
+      it "creates a new cart" do
+        expect do
+          post "/api/carts"
+        end.to change(Cart, :count).by(1)
+
+        expect(response).to have_http_status(:created)
+
+        json = JSON.parse(response.body)
+
+        expect(json["id"]).to be_present
+        expect(json["token"]).to be_present
+      end
+
+      it "returns the existing cart instead of creating another" do
+        existing_cart = cart
+
+        expect do
+          post "/api/carts"
+        end.not_to change(Cart, :count)
+
+        json = JSON.parse(response.body)
+
+        expect(json["id"]).to eq(existing_cart.id)
+        expect(json["token"]).to eq(existing_cart.token)
+      end
+    end
+
+    context "when not logged in" do
+      it "returns unauthorized" do
         post "/api/carts"
-      end.to change(Cart, :count).by(1)
 
-      expect(response).to have_http_status(:created)
-
-      json = JSON.parse(response.body)
-
-      expect(json["id"]).to be_present
-      expect(json["token"]).to be_present
+        expect(response).to have_http_status(:unauthorized)
+      end
     end
   end
 
