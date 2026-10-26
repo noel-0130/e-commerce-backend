@@ -96,8 +96,12 @@ class Api::V1::AuthController < ApplicationController
   end
 
   def register
-    email = params[:ebundle install
-bin/rails db:migratemail].to_s.strip.downcase
+    email = params[:egit add app/controllers/api/v1/auth_controller.rb
+git commit -m "Fix email param typo in register"
+
+git checkout main
+git merge feature/email-auth
+git push origin mainmail].to_s.strip.downcase
 
     if User.exists?(email: email)
       return render json: {
