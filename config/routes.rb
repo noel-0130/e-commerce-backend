@@ -11,6 +11,8 @@ Rails.application.routes.draw do
 
     post "carts/:cart_id/checkout", to: "checkouts#create"
 
+    resources :orders, only: [:index, :show]
+
     namespace :v1 do
       post "auth/google", to: "auth#google"
       get "auth/me", to: "auth#me"

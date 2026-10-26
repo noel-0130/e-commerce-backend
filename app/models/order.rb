@@ -1,5 +1,6 @@
 class Order < ApplicationRecord
   has_many :order_items, dependent: :destroy
+  belongs_to :user, optional: true
 
   validates :customer_name, presence: true
   validates :customer_email, presence: true

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_23_074821) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_26_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -56,6 +56,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_23_074821) do
     t.string "status", default: "pending", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_orders_on_user_id"
     t.check_constraint "total_amount >= 0::numeric", name: "orders_total_amount_non_negative"
   end
 
@@ -101,4 +103,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_23_074821) do
   add_foreign_key "carts", "users"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
+  add_foreign_key "orders", "users"
 end

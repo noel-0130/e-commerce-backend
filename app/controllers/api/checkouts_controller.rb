@@ -32,6 +32,7 @@ class Api::CheckoutsController < ApplicationController
       end
 
       order = Order.create!(
+        user: cart.user,
         customer_name: params[:customer_name],
         customer_email: params[:customer_email],
         shipping_address: params[:shipping_address],
