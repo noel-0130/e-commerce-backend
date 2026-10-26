@@ -58,4 +58,6 @@ gem "googleauth", "~> 1.17"
 
 gem "activerecord-session_store"
 
+gem "bcrypt", "~> 3.1.7"
+
 gem "factory_bot_rails", "~> 6.5", groups: [:development, :test]

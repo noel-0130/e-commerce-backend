@@ -94,4 +94,53 @@ class Api::V1::AuthController < ApplicationController
       message: "Logged out successfully"
     }, status: :ok
   end
+
+  def register
+    email = params[:ebundle install
+bin/rails db:migratemail].to_s.strip.downcase
+
+    if User.exists?(email: email)
+      return render json: {
+        error: "An account with this email already exists"
+      }, status: :conflict
+    end
+
+    user = User.new(
+      name: params[:name].to_s.strip,
+      email: email,
+      password: params[:password].to_s
+    )
+
+    unless user.save
+      return render json: {
+        errors: user.errors.full_messages
+      }, status: :unprocessable_entity
+    end
+
+    reset_session
+    session[:user_id] = user.id
+
+    render json: {
+      message: "Registration successful",
+      user: { id: user.id, email: user.email, name: user.name }
+    }, status: :created
+  end
+
+  def login
+    user = User.find_by(email: params[:email].to_s.strip.downcase)
+
+    unless user&.password_digest.present? && user.authenticate(params[:password].to_s)
+      return render json: {
+        error: "Invalid email or password"
+      }, status: :unauthorized
+    end
+
+    reset_session
+    session[:user_id] = user.id
+
+    render json: {
+      message: "Login successful",
+      user: { id: user.id, email: user.email, name: user.name }
+    }, status: :ok
+  end
 end
