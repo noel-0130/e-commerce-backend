@@ -2,7 +2,8 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins(
       "http://localhost:5173",
-      /\.app\.github\.dev$/
+      /\.app\.github\.dev$/,
+      "https://noel-shop-ten.vercel.app"
     )
 
     resource "*",
