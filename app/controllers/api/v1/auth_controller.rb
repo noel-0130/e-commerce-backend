@@ -69,39 +69,8 @@ class Api::V1::AuthController < ApplicationController
     }, status: :ok
   end
 
-  def me
-    user = User.find_by(id: session[:user_id])
-
-    unless user
-      return render json: {
-        error: "Not authenticated"
-      }, status: :unauthorized
-    end
-
-    render json: {
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name
-      }
-    }, status: :ok
-  end
-
-  def logout
-    reset_session
-
-    render json: {
-      message: "Logged out successfully"
-    }, status: :ok
-  end
-
   def register
-    email = params[:egit add app/controllers/api/v1/auth_controller.rb
-git commit -m "Fix email param typo in register"
-
-git checkout main
-git merge feature/email-auth
-git push origin mainmail].to_s.strip.downcase
+    email = params[:email].to_s.strip.downcase
 
     if User.exists?(email: email)
       return render json: {
@@ -145,6 +114,32 @@ git push origin mainmail].to_s.strip.downcase
     render json: {
       message: "Login successful",
       user: { id: user.id, email: user.email, name: user.name }
+    }, status: :ok
+  end
+
+  def me
+    user = User.find_by(id: session[:user_id])
+
+    unless user
+      return render json: {
+        error: "Not authenticated"
+      }, status: :unauthorized
+    end
+
+    render json: {
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name
+      }
+    }, status: :ok
+  end
+
+  def logout
+    reset_session
+
+    render json: {
+      message: "Logged out successfully"
     }, status: :ok
   end
 end
