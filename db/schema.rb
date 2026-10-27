@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_122321) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_27_053346) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -68,6 +68,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_122321) do
     t.integer "stock", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "image_url"
     t.check_constraint "price >= 0::numeric", name: "products_price_non_negative"
     t.check_constraint "stock >= 0", name: "products_stock_non_negative"
   end
