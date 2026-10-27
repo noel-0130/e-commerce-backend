@@ -146,12 +146,12 @@ products = [
 # Reset products and their associated cart items.
 # Users are preserved.
 ActiveRecord::Base.transaction do
-  Product.destroy_all
-
   products.each do |attributes|
-    Product.create!(attributes)
+    product = Product.find_or_initialize_by(name: attributes[:name])
+    product.assign_attributes(attributes)
+    product.save!
   end
 end
 
-puts "Products recreated: #{Product.count}"
+puts "Products updated: #{Product.count}"
 puts "Products without images: #{Product.where(image_url: [nil, ""]).count}"
