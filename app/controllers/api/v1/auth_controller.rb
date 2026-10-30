@@ -96,7 +96,7 @@ class Api::V1::AuthController < ApplicationController
     UserMailer.verify_email(user).deliver_now
 
     render json: {
-      message: "Check your email para i-verify ang account mo"
+      message: "Check your email to verify your account"
     }, status: :created
   end
 
@@ -111,7 +111,7 @@ class Api::V1::AuthController < ApplicationController
 
     unless user.email_verified?
       return render json: {
-        error: "I-verify muna ang email mo",
+        error: "Please verify your email first",
         code: "email_not_verified"
       }, status: :forbidden
     end
@@ -170,7 +170,7 @@ class Api::V1::AuthController < ApplicationController
     UserMailer.verify_email(user).deliver_now if user && !user.email_verified?
 
     render json: {
-      message: "Kung may account at hindi pa verified, napadala na ang email."
+      message: "If an account exists and isn't verified yet, we've sent the email."
     }, status: :ok
   end
 end

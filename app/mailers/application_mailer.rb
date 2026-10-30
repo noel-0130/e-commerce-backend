@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "no-reply@yourdomain.com"
+  default from: -> { "Noel Shop <#{ENV.fetch('GMAIL_SENDER', 'no-reply@example.com')}>" }
   layout "mailer"
 end

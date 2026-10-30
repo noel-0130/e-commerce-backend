@@ -4,6 +4,6 @@ class UserMailer < ApplicationMailer
     token = user.generate_token_for(:email_verification)
     @url = "#{ENV.fetch('API_URL')}/api/v1/auth/verify_email?token=#{token}"
 
-    mail(to: user.email, subject: "I-verify ang email mo")
+    mail(to: user.email, subject: "Verify your email address")
   end
 end
