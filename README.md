@@ -1,4 +1,4 @@
-# TechHub — E-commerce Backend API
+# TechHub — E-commerce Backend API 1
 
 Backend API for TechHub, an e-commerce platform built with Ruby on Rails and PostgreSQL.
 
