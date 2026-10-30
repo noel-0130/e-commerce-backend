@@ -1,6 +1,6 @@
 Rails.application.config.session_store(
   :active_record_store,
-  key: "_shopease_session",
+  key: "_noelshop_session",
   same_site: Rails.env.production? ? :none : :lax,
   httponly: true,
   secure: Rails.env.production?
