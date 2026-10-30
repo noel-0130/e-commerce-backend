@@ -138,7 +138,8 @@ class Api::V1::AuthController < ApplicationController
       user: {
         id: user.id,
         email: user.email,
-        name: user.name
+        name: user.name,
+        email_verified_at: user.email_verified_at
       }
     }, status: :ok
   end
