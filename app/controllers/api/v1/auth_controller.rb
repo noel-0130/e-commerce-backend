@@ -1,6 +1,8 @@
 require "googleauth"
 
 class Api::V1::AuthController < ApplicationController
+  rate_limit to: 3, within: 1.hour, only: :resend_verification
+
   def google
     token = params[:credential]
 
@@ -49,6 +51,7 @@ class Api::V1::AuthController < ApplicationController
 
     user.email = email
     user.name = name
+    user.email_verified_at ||= Time.current
 
     unless user.save
       return render json: {
@@ -90,12 +93,10 @@ class Api::V1::AuthController < ApplicationController
       }, status: :unprocessable_entity
     end
 
-    reset_session
-    session[:user_id] = user.id
+    UserMailer.verify_email(user).deliver_now
 
     render json: {
-      message: "Registration successful",
-      user: { id: user.id, email: user.email, name: user.name }
+      message: "Check your email para i-verify ang account mo"
     }, status: :created
   end
 
@@ -106,6 +107,13 @@ class Api::V1::AuthController < ApplicationController
       return render json: {
         error: "Invalid email or password"
       }, status: :unauthorized
+    end
+
+    unless user.email_verified?
+      return render json: {
+        error: "I-verify muna ang email mo",
+        code: "email_not_verified"
+      }, status: :forbidden
     end
 
     reset_session
@@ -140,6 +148,29 @@ class Api::V1::AuthController < ApplicationController
 
     render json: {
       message: "Logged out successfully"
+    }, status: :ok
+  end
+
+  def verify_email
+    user = User.find_by_token_for(:email_verification, params[:token])
+    frontend = ENV.fetch("FRONTEND_URL")
+
+    if user
+      user.verify_email!
+      reset_session
+      session[:user_id] = user.id
+      redirect_to "#{frontend}/email-verified", allow_other_host: true
+    else
+      redirect_to "#{frontend}/verify-failed", allow_other_host: true
+    end
+  end
+
+  def resend_verification
+    user = User.find_by(email: params[:email].to_s.strip.downcase)
+    UserMailer.verify_email(user).deliver_now if user && !user.email_verified?
+
+    render json: {
+      message: "Kung may account at hindi pa verified, napadala na ang email."
     }, status: :ok
   end
 end

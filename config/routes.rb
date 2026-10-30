@@ -19,6 +19,8 @@ Rails.application.routes.draw do
       post "auth/login", to: "auth#login"
       get "auth/me", to: "auth#me"
       delete "auth/logout", to: "auth#logout"
+      get "auth/verify_email", to: "auth#verify_email"
+      post "auth/resend_verification", to: "auth#resend_verification"
     end
   end
 end

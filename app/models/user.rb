@@ -12,6 +12,18 @@ class User < ApplicationRecord
   validates :password, length: { minimum: 8 }, if: -> { password.present? }
   validate :google_or_password_present
 
+  generates_token_for :email_verification, expires_in: 24.hours do
+    [email, email_verified_at]
+  end
+
+  def email_verified?
+    email_verified_at.present?
+  end
+
+  def verify_email!
+    update!(email_verified_at: Time.current)
+  end
+
   private
 
   def google_or_password_present
