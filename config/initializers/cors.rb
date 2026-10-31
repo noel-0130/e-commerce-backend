@@ -1,10 +1,11 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins(
-      "http://localhost:5173",
-      /\.app\.github\.dev$/,
-      "https://noel-llosa.vercel.app"
-    )
+    allowed_origins = ENV.fetch("ALLOWED_ORIGINS", "http://localhost:5173")
+                         .split(",")
+                         .map(&:strip)
+                         .reject(&:empty?)
+
+    origins(*allowed_origins, /\.app\.github\.dev$/)
 
     resource "*",
       headers: :any,

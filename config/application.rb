@@ -2,6 +2,15 @@ require_relative "boot"
 
 require "rails/all"
 
+# Load environment variables based on Rails.env (like Vite)
+require "dotenv"
+env_files = [
+  File.expand_path("../.env.#{Rails.env}.local", __dir__),
+  File.expand_path("../.env.#{Rails.env}", __dir__),
+  File.expand_path("../.env", __dir__)
+]
+Dotenv.load(*env_files)
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
