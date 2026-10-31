@@ -1,152 +1,62 @@
-# TechHub — E-commerce Backend API 1
+# E-Commerce Backend (Ruby on Rails API)
 
-Backend API for TechHub, an e-commerce platform built with Ruby on Rails and PostgreSQL.
-
-🌐 **Frontend Website:** https://noel-llosa.vercel.app/  
-📦 **Frontend Repository:** https://github.com/noel-0130/e-commerce-frontend
-
-## Features
-
-- User registration
-- Email and password authentication
-- Google OAuth authentication
-- Email verification
-- Resend verification email
-- Session-based authentication
-- Product management
-- Shopping cart management
-- Checkout
-- Cash on Delivery (COD)
-- Order management
-- Stock management
-- PostgreSQL database
-- Gmail API email delivery
+A RESTful API for the E-Commerce application with user authentication, product management, cart, orders, and email verification.
 
 ## Tech Stack
-
-- Ruby 3.4.9
-- Ruby on Rails 8.1.4
+- Ruby on Rails 8 (API only)
 - PostgreSQL
-- Puma
-- Active Record
-- BCrypt
-- Google Auth
+- ActionMailer with Gmail API
+- BCrypt for password hashing
 - Rack CORS
-- Active Record Session Store
-- Gmail API
 
-## Installation
+## Features
+- User registration & login (email + password, Google OAuth)
+- Email verification
+- Product catalog, categories, and brands
+- Shopping cart
+- Orders & checkout
+- Admin management
+- Session-based authentication
 
-### 1. Clone the Repository
+## Setup
 
+### 1. Clone the repo
 ```bash
 git clone https://github.com/noel-0130/e-commerce-backend.git
 cd e-commerce-backend
 ```
 
-### 2. Install Dependencies
-
+### 2. Install dependencies
 ```bash
 bundle install
 ```
 
-### 3. Configure Environment Variables
-
-Create a `.env` file in the project root.
-
-```env
-FRONTEND_URL=http://localhost:5173
-API_URL=http://localhost:3000
-
-GOOGLE_CLIENT_ID=your_google_client_id
-
-DATABASE_URL=your_database_url
-
-GMAIL_CLIENT_ID=your_gmail_client_id
-GMAIL_CLIENT_SECRET=your_gmail_client_secret
-GMAIL_REFRESH_TOKEN=your_gmail_refresh_token
-GMAIL_SENDER_EMAIL=your_email@gmail.com
-```
-
-Replace the placeholder values with your actual credentials.
-
-**Important:** Never commit your `.env` file or expose your private credentials.
-
-### 4. Prepare the Database
+### 3. Setup environment variables
+Copy `.env.example` to `.env`, `.env.development`, or `.env.production` depending on your environment.
 
 ```bash
-bin/rails db:prepare
+cp .env.example .env.development
 ```
 
-### 5. Seed the Database
+Fill in the required values.
 
+### 4. Setup database
 ```bash
-bin/rails db:seed
+bin/rails db:create db:migrate db:seed
 ```
 
-### 6. Start the Rails Server
-
+### 5. Run the server
 ```bash
-bin/rails server
+bin/rails server -b 0.0.0.0 -p 3000
 ```
 
-The backend API will run at:
+The API will be available at `http://localhost:3000`
 
-http://localhost:3000
+## Environment Files
+- `.env.development` - used in development (`RAILS_ENV=development`)
+- `.env.production` - used in production (`RAILS_ENV=production`)
+- `.env` - fallback
 
-## API Endpoints
-
-### Authentication
-
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/register` | Register a new user |
-| POST | `/login` | User login |
-| DELETE | `/logout` | User logout |
-| GET | `/me` | Get authenticated user |
-| POST | `/google_login` | Google authentication |
-| GET | `/verify_email` | Verify email address |
-
-### Products
-
-Product endpoints are used to retrieve and manage product information.
-
-### Cart
-
-Cart endpoints are used to manage shopping cart items.
-
-### Orders
-
-Order endpoints are used for checkout and order management.
-
-## Frontend Integration
-
-This backend is connected to the TechHub frontend.
-
-Frontend repository:
-
-https://github.com/noel-0130/e-commerce-frontend
-
-Live website:
-
-https://noel-llosa.vercel.app/
-
-## Security
-
-- Password hashing with BCrypt
-- Session-based authentication
-- HTTP-only session cookies
-- Secure cookies in production
-- CORS configuration
-- Email verification
-- Environment variables for sensitive credentials
-
-## Deployment
-
-The backend requires a configured PostgreSQL database and production environment variables.
-
-Make sure the frontend URL is allowed in the backend CORS configuration.
-
-## Author
-
-Noel A. Llosa
+## Links
+- Frontend: [https://github.com/noel-0130/e-commerce-frontend](https://github.com/noel-0130/e-commerce-frontend)
+- Live Site: [https://noel-llosa.vercel.app/](https://noel-llosa.vercel.app/)
